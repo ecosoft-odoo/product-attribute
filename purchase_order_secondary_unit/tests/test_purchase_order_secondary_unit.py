@@ -34,22 +34,12 @@ class TestPurchaseOrderSecondaryUnit(SavepointCase):
             [("product_tmpl_id", "=", cls.product.product_tmpl_id.id)]
         )
         cls.product.purchase_secondary_uom_id = cls.secondary_unit.id
-        cls.partner = cls.env["res.partner"].create(
-            {"name": "test - partner", "supplier": True}
-        )
-        type_obj = cls.env["stock.picking.type"]
+        cls.partner = cls.env["res.partner"].create({"name": "test - partner"})
         company_id = cls.env.user.company_id.id
-        picking_type_id = type_obj.search(
-            [("code", "=", "incoming"), ("warehouse_id.company_id", "=", company_id)],
-            limit=1,
-        )
-        if not picking_type_id:
-            picking_type_id = cls.env.ref("stock.picking_type_in")
         cls.purchase_order_obj = cls.env["purchase.order"]
         po_val = {
             "partner_id": cls.partner.id,
             "company_id": cls.env.user.company_id.id,
-            "picking_type_id": picking_type_id.id,
             "order_line": [
                 (
                     0,
